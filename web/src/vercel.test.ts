@@ -13,6 +13,11 @@ describe("platform-configured backend security policy", () => {
       vi.stubEnv("VITE_API_BASE_URL", `${origin}/`);
       const { config } = await import("../../vercel.ts");
       const headers = config.headers[0].headers;
+      const deployed = JSON.parse(JSON.stringify(config));
+      for (const header of deployed.headers[0].headers) {
+        expect(typeof header.value).toBe("string");
+        expect(header.value.trim().length).toBeGreaterThan(0);
+      }
       const policy = headers.find(
         (header) => header.key === "Content-Security-Policy",
       )!.value;

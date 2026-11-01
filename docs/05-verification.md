@@ -1,5 +1,11 @@
 # 05 · Verification record
 
+## November 1, 2026: hosted CSP schema compatibility
+
+- Hosted Vercel validation reported a missing CSP header value. Replaced the array/`join()` expression with a direct template string while preserving the platform-configured backend origin.
+- Vercel CLI 65.9.0 compiled the corrected configuration and its schema validator accepted the generated JSON, including the CSP value. The same CLI also accepts the original expression locally, so the exact hosted failure was not reproduced.
+- All 24 frontend tests pass, including header values surviving JSON serialization; production build and file-size checks pass. A new hosted deployment is still required to confirm the reported error is resolved there.
+
 ## November 1, 2026: platform-configured backend origin
 
 - Replaced static `vercel.json` with `vercel.ts`. The API client and exact-origin connection policy now read the same `VITE_API_BASE_URL` platform variable.

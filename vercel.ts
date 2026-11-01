@@ -27,16 +27,7 @@ export const config = {
         },
         {
           key: "Content-Security-Policy",
-          value: [
-            "default-src 'self'",
-            "script-src 'self'",
-            "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data:",
-            `connect-src 'self'${origin ? ` ${origin}` : ""}`,
-            "frame-ancestors 'none'",
-            "base-uri 'none'",
-            "form-action 'self'",
-          ].join("; "),
+          value: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${origin}; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`,
         },
       ],
     },
