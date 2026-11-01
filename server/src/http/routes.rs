@@ -1,4 +1,5 @@
 use super::{
+    cors::cors,
     handlers::{extract_handler, generate_handler},
     safeguards::safeguards,
 };
@@ -13,10 +14,7 @@ use axum::{
 use tower_http::services::{ServeDir, ServeFile};
 
 pub(crate) fn app(state: AppState) -> Router {
-    let static_files = ServeDir::new(&state.config.web_dir).not_found_service(ServeFile::new(
-        format!("{}/index.html", state.config.web_dir),
-    ));
-    Router::new()
+    let router = Router::new()
         .route(
             "/health",
             get(|| async { Json(serde_json::json!({"status":"ok","service":"pagepilot"})) }),
@@ -39,9 +37,29 @@ pub(crate) fn app(state: AppState) -> Router {
                 "method_not_allowed",
                 "This HTTP method is not supported.",
             )
-        })
-        .fallback_service(static_files)
+        });
+    let router = if state.config.serve_frontend {
+        let files = ServeDir::new(&state.config.web_dir).not_found_service(ServeFile::new(
+            format!("{}/index.html", state.config.web_dir),
+        ));
+        router.fallback_service(files)
+    } else {
+        router
+            .route(
+                "/",
+                get(|| async {
+                    Json(serde_json::json!({
+                        "service":"pagepilot", "mode":"api", "health":"/health"
+                    }))
+                }),
+            )
+            .fallback(|| async {
+                ApiError::new(StatusCode::NOT_FOUND, "not_found", "API route not found.")
+            })
+    };
+    router
         .layer(DefaultBodyLimit::max(state.config.max_request_bytes))
         .layer(middleware::from_fn_with_state(state.clone(), safeguards))
+        .layer(cors(&state.config.origins))
         .with_state(state)
 }

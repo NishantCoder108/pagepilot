@@ -2,6 +2,8 @@ use std::{env, net::SocketAddr, sync::Arc, time::Duration};
 use tokio::sync::Semaphore;
 
 pub struct Config {
+    pub origins: crate::origin::OriginPolicy,
+    pub serve_frontend: bool,
     pub bind: SocketAddr,
     pub fetch_slots: usize,
     pub parse_slots: usize,
@@ -31,6 +33,16 @@ fn number(name: &str, default: usize) -> usize {
 impl Config {
     pub fn from_env() -> Self {
         Self {
+            origins: crate::origin::OriginPolicy::from_list(
+                &env::var("ALLOWED_ORIGINS").unwrap_or_default(),
+            )
+            .expect("ALLOWED_ORIGINS must contain exact HTTPS origins or localhost HTTP origins"),
+            serve_frontend: env::var("SERVE_FRONTEND")
+                .map(|v| {
+                    v.parse::<bool>()
+                        .expect("SERVE_FRONTEND must be true or false")
+                })
+                .unwrap_or(true),
             bind: env::var("BIND_ADDR")
                 .unwrap_or_else(|_| "127.0.0.1:3000".into())
                 .parse()

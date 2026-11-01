@@ -24,15 +24,11 @@ pub(super) async fn safeguards(
         _ => "static",
     };
     if req.method() == axum::http::Method::POST {
-        if req
-            .headers()
-            .get("sec-fetch-site")
-            .is_some_and(|v| v == "cross-site")
-        {
+        if !state.config.origins.permits(req.headers()) {
             return ApiError::new(
                 StatusCode::FORBIDDEN,
                 "cross_site",
-                "Cross-site requests are not allowed.",
+                "This frontend origin is not allowed to use the API.",
             )
             .into_response();
         }
