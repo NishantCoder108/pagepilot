@@ -1,0 +1,39 @@
+.recent-section {
+  margin-top: 38px;
+}
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+.recent-grid > button {
+  text-align: left;
+  border: 1px solid #e2e7da;
+  border-radius: 9px;
+  background: #fff;
+  padding: 17px;
+}
+.recent-grid svg {
+  color: #91a17e;
+}
+.recent-grid small {
+  display: block;
+  font-size: 9px;
+  color: #9aa78b;
+  margin-top: 13px;
+}
+.recent-grid h3 {
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.6;
+  margin: 5px 0 15px;
+  color: #516648;
+}
+.recent-grid span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px;
+  color: #83956f;
+}

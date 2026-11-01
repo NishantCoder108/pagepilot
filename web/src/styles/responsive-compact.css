@@ -1,0 +1,48 @@
+@media (max-width: 1150px) {
+  .sidebar {
+    width: 210px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .main {
+    margin-left: 210px;
+    width: calc(100% - 210px);
+  }
+  .home {
+    padding: 50px 40px 25px;
+  }
+  .topbar {
+    padding: 0 30px;
+  }
+  .service-status {
+    display: none;
+  }
+  .workspace {
+    padding: 30px 24px;
+  }
+  .workspace-grid {
+    gap: 14px;
+  }
+  .summary-content {
+    padding: 20px;
+  }
+  .source-content {
+    padding-right: 12px;
+  }
+  .ai-empty h2 {
+    font-size: 22px;
+  }
+  .ai-tabs {
+    gap: 18px;
+    padding: 0 16px;
+  }
+  .ai-tabs > button {
+    font-size: 10px;
+  }
+  .passage p {
+    font-size: 12px;
+  }
+  .generation-heading {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,67 @@
+.chat-composer {
+  margin: 12px 17px;
+  border: 1px solid #dce6cd;
+  background: #fcfdf9;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.chat-composer textarea {
+  border: 0;
+  width: 100%;
+  resize: vertical;
+  min-height: 43px;
+  max-height: 140px;
+  font-size: 11px;
+  background: transparent;
+  box-shadow: none !important;
+  color: #5e774f;
+}
+.chat-composer textarea::placeholder {
+  color: #a8b398;
+}
+.chat-composer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-composer .text-button {
+  font-size: 8px;
+}
+.send-button {
+  display: grid;
+  place-items: center;
+  color: #eff5e4;
+  background: #355d3f;
+  border-radius: 6px;
+  width: 29px;
+  height: 29px;
+}
+.stream-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  font-size: 9px;
+  color: #88a16f;
+  background: #f5f8ee;
+}
+.stream-status > span {
+  flex: 1;
+}
+.stream-status button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #d7e3c8;
+  border-radius: 4px;
+  padding: 4px 7px;
+  font-size: 9px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

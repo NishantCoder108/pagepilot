@@ -1,0 +1,71 @@
+.how-it-works {
+  margin-top: 53px;
+}
+.section-label {
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 1.5px;
+  color: #8c9a7f;
+}
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 22px;
+}
+.workflow-grid > div {
+  position: relative;
+}
+.step-icon {
+  display: inline-grid;
+  place-items: center;
+  background: #edf1e6;
+  color: #739060;
+  width: 39px;
+  height: 39px;
+  border: 1px solid #e5ebdc;
+  border-radius: 11px;
+}
+.workflow-grid h3 {
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: -0.1px;
+  margin-top: 13px;
+  color: #4a6141;
+}
+.workflow-grid p {
+  font-size: 10px;
+  color: #94a088;
+  line-height: 1.9;
+  margin-top: 6px;
+}
+.workflow-grid small {
+  position: absolute;
+  right: 22px;
+  top: 7px;
+  font-size: 10px;
+  color: #c5cdba;
+  font-family: Georgia, serif;
+}
+.home-footer {
+  margin-top: 55px;
+  padding-top: 22px;
+  border-top: 1px solid #e6eadf;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  align-items: center;
+  color: #a5ad9a;
+  font-size: 9px;
+}
+.home-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.home-footer > i {
+  height: 3px;
+  width: 3px;
+  background: #c4ccba;
+  border-radius: 50%;
+}

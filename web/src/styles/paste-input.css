@@ -1,0 +1,46 @@
+.paste-entry {
+  padding: 20px 23px;
+}
+.paste-entry > input,
+.paste-entry > textarea {
+  border: 1px solid #dfe5d7;
+  border-radius: 7px;
+  padding: 11px 12px;
+  background: #fcfdf9;
+  width: 100%;
+  margin-bottom: 12px;
+  color: #435b3b;
+  font-size: 12px;
+}
+.paste-entry textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+.paste-entry > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.paste-entry small {
+  color: #97a18b;
+  font-size: 10px;
+}
+.sample-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  font-size: 10px;
+  margin: 17px 0 0;
+  color: #9ba390;
+}
+.sample-link span {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  color: #6d875c;
+}
+.sample-link:hover span {
+  text-decoration: underline;
+}

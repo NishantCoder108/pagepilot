@@ -1,0 +1,100 @@
+.input-card {
+  border: 1px solid #e1e6da;
+  border-radius: 12px;
+  background: #fff;
+  margin-top: 33px;
+  box-shadow: 0 8px 26px #2b3d2306;
+  overflow: hidden;
+}
+.input-tabs {
+  display: flex;
+  gap: 21px;
+  padding: 0 23px;
+  border-bottom: 1px solid #edf0e7;
+  height: 49px;
+  align-items: stretch;
+}
+.input-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #9aa390;
+  padding: 0 1px;
+  position: relative;
+}
+.input-tabs button.selected {
+  color: #41613a;
+}
+.input-tabs button.selected:after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #5c7f4d;
+}
+.input-tabs > span {
+  margin-left: auto;
+  font-size: 9px;
+  align-self: center;
+  color: #9fa794;
+}
+.url-entry {
+  display: flex;
+  align-items: center;
+  margin: 23px 23px 20px;
+  padding: 6px 6px 6px 15px;
+  gap: 12px;
+  border: 1px solid #e1e6d9;
+  border-radius: 8px;
+  background: #fcfdf9;
+}
+.url-entry > svg {
+  color: #a7b299;
+}
+.url-entry input {
+  border: 0 !important;
+  background: transparent;
+  min-width: 0;
+  flex: 1;
+  font-size: 12px;
+  color: #42583b;
+  box-shadow: none !important;
+  padding: 8px 0;
+}
+.url-entry input::placeholder {
+  color: #a0a895;
+}
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: #315640;
+  color: #fbfdf6;
+  border: 1px solid #315640;
+  border-radius: 6px;
+  padding: 11px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+.primary:hover:not(:disabled) {
+  background: #23432e;
+  transform: translateY(-1px);
+}
+.input-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-top: 1px solid #f0f2eb;
+  padding: 12px 23px;
+  background: #fcfdf9;
+  color: #99a18d;
+  font-size: 9px;
+}

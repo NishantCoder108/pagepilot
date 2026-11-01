@@ -1,0 +1,130 @@
+@media (max-width: 850px) {
+  .sidebar {
+    width: 180px;
+    padding: 26px 13px 16px;
+  }
+  .brand {
+    font-size: 22px;
+    gap: 8px;
+  }
+  .brand-mark {
+    width: 31px;
+    height: 33px;
+  }
+  .main {
+    margin-left: 180px;
+    width: calc(100% - 180px);
+  }
+  .topbar {
+    padding: 0 24px;
+    height: 70px;
+  }
+  .home {
+    padding: 45px 30px 25px;
+  }
+  .home h1 {
+    font-size: 48px;
+  }
+  .home-intro > p {
+    font-size: 12px;
+  }
+  .url-entry {
+    margin: 18px 16px;
+    padding-left: 10px;
+    gap: 8px;
+  }
+  .url-entry input {
+    font-size: 11px;
+  }
+  .url-entry .primary {
+    padding: 11px 12px;
+    font-size: 10px;
+  }
+  .input-tabs {
+    padding: 0 17px;
+  }
+  .input-tabs > span {
+    display: none;
+  }
+  .workflow-grid {
+    gap: 15px;
+  }
+  .workflow-grid h3 {
+    font-size: 11px;
+  }
+  .workflow-grid p {
+    font-size: 9px;
+  }
+  .workflow-grid small {
+    right: 0;
+  }
+  .home-footer {
+    gap: 10px;
+    font-size: 8px;
+  }
+  .mobile-pane-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 14px;
+    background: #edf1e6;
+    padding: 4px;
+    border-radius: 8px;
+  }
+  .mobile-pane-tabs button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px;
+    font-size: 11px;
+    color: #93a280;
+    border-radius: 5px;
+  }
+  .mobile-pane-tabs button.selected {
+    background: #fff;
+    color: #5d7a48;
+    box-shadow: 0 1px 5px #2d45200a;
+  }
+  .workspace-grid {
+    display: block;
+  }
+  .workspace-grid > .panel {
+    display: none;
+  }
+  .workspace-grid > .mobile-visible {
+    display: flex;
+    flex-direction: column;
+  }
+  .source-content,
+  .summary-content,
+  .chat-content {
+    max-height: none;
+    min-height: 350px;
+  }
+  .source-content {
+    max-height: 70vh;
+  }
+  .chat-content {
+    max-height: 60vh;
+  }
+  .ai-empty {
+    min-height: 350px;
+  }
+  .workspace-heading h1 {
+    font-size: 27px;
+  }
+  .workspace {
+    padding: 28px 24px;
+  }
+  .document-meta {
+    gap: 10px;
+    font-size: 9px;
+  }
+  .recent-grid {
+    grid-template-columns: 1fr;
+  }
+  .recent-grid h3 {
+    margin-bottom: 10px;
+  }
+}

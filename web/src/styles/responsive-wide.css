@@ -1,0 +1,29 @@
+@media (min-width: 1500px) {
+  .home {
+    padding-top: 90px;
+  }
+  .home h1 {
+    font-size: 70px;
+  }
+  .home-intro > p {
+    font-size: 15px;
+  }
+  .home .input-card {
+    margin-top: 40px;
+  }
+  .how-it-works {
+    margin-top: 65px;
+  }
+  .home-footer {
+    margin-top: 70px;
+  }
+  .workflow-grid p {
+    font-size: 12px;
+  }
+  .workflow-grid h3 {
+    font-size: 14px;
+  }
+  .topbar {
+    padding: 0 54px;
+  }
+}

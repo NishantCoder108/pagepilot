@@ -1,0 +1,63 @@
+@media (max-width: 580px) {
+  .workspace {
+    padding: 24px 18px;
+  }
+  .workspace-heading {
+    align-items: flex-start;
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+  .workspace-heading h1 {
+    font-size: 25px;
+    letter-spacing: -0.5px;
+    margin-top: 10px;
+  }
+  .workspace-heading .eyebrow {
+    font-size: 7px;
+    letter-spacing: 1.3px;
+  }
+  .document-actions {
+    flex-direction: column;
+  }
+  .icon-button {
+    width: 30px;
+    height: 30px;
+  }
+  .document-meta {
+    gap: 9px;
+    flex-wrap: wrap;
+    font-size: 8px;
+  }
+  .summary-content {
+    padding: 21px;
+  }
+  .settings-body {
+    padding: 28px;
+  }
+  .settings-body h2 {
+    font-size: 28px;
+  }
+  .notice {
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+  .notice .text-button {
+    margin-left: 26px;
+  }
+  .recent-grid {
+    display: flex;
+    overflow: auto;
+    gap: 10px;
+  }
+  .recent-grid > button {
+    display: block;
+    min-width: 220px;
+    flex: 1;
+  }
+  .home-footer > i:last-of-type {
+    display: none;
+  }
+  .home-footer > span:last-child {
+    display: none;
+  }
+}

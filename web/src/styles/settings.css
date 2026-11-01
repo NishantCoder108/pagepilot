@@ -1,0 +1,104 @@
+.settings-dialog {
+  padding: 0;
+  border: 1px solid #d8e2ce;
+  border-radius: 15px;
+  width: min(480px, calc(100vw - 30px));
+  color: #435c36;
+  background: #fdfefb;
+  box-shadow: 0 25px 100px #1d342c35;
+  max-height: 90vh;
+  overflow: auto;
+}
+.settings-dialog::backdrop {
+  background: #1c2c2450;
+  backdrop-filter: blur(3px);
+}
+.settings-body {
+  position: relative;
+  padding: 33px;
+}
+.dialog-close {
+  position: absolute;
+  top: 17px;
+  right: 17px;
+  background: transparent;
+  border: 0;
+}
+.settings-body > .eyebrow {
+  margin: 21px 0 12px;
+  font-size: 8px;
+}
+.settings-body h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.25;
+  letter-spacing: -0.7px;
+}
+.settings-body h2 em {
+  color: #8ba273;
+}
+.settings-body > p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #95a285;
+  margin: 16px 0 22px;
+}
+.settings-body > label {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #7e946c;
+  margin: 15px 0;
+}
+.settings-body select,
+.settings-body input {
+  display: block;
+  width: 100%;
+  background: #f8faf3;
+  border: 1px solid #dfe8d3;
+  border-radius: 6px;
+  padding: 10px 11px;
+  font-size: 11px;
+  color: #637d50;
+  margin-top: 7px;
+}
+.key-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 9px;
+  color: #a2b18e;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+.key-note > svg {
+  margin-top: 3px;
+}
+.settings-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+.settings-library {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #e5ebdc;
+  margin-top: 26px;
+  padding-top: 19px;
+}
+.settings-library strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #80976c;
+}
+.settings-library small {
+  display: block;
+  font-size: 8px;
+  color: #acb79c;
+  margin-top: 4px;
+}

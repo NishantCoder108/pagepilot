@@ -1,0 +1,90 @@
+.chat-content {
+  overflow: auto;
+  padding: 22px;
+  flex: 1;
+  max-height: calc(100vh - 520px);
+  min-height: 280px;
+  scrollbar-width: thin;
+  scrollbar-color: #d9e1cf transparent;
+}
+.chat-empty {
+  padding: 10px 0 17px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.chat-empty h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.4;
+  color: #59724a;
+  margin: 15px 0 9px;
+}
+.chat-empty p {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #9eaa8e;
+  margin-bottom: 20px;
+}
+.question-chip {
+  border: 1px solid #e1e9d5;
+  background: #fcfdf9;
+  border-radius: 6px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 9px;
+  color: #829a6c;
+  padding: 9px 11px;
+  margin: 4px 0;
+  width: 100%;
+  max-width: 275px;
+}
+.question-chip svg {
+  margin-left: auto;
+}
+.message {
+  margin-bottom: 24px;
+}
+.message-author {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #657c54;
+  margin-bottom: 10px;
+}
+.message-author small {
+  font-size: 8px;
+  color: #abb79b;
+  margin-left: auto;
+}
+.user-avatar,
+.ai-avatar {
+  display: grid;
+  place-items: center;
+  background: #e8eedf;
+  border-radius: 5px;
+  width: 21px;
+  height: 21px;
+  font-size: 9px;
+  color: #7f9468;
+}
+.ai-avatar {
+  background: #33593e;
+  color: #dfeacb;
+}
+.message.user > p {
+  white-space: pre-wrap;
+  background: #f4f6ef;
+  border: 1px solid #e9eedf;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #758467;
+  overflow-wrap: anywhere;
+}

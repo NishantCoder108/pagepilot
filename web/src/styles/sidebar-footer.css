@@ -1,0 +1,39 @@
+.sidebar-bottom {
+  margin-top: auto;
+}
+.local-note {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 16px 4px;
+  color: #68795f;
+  font-size: 11px;
+}
+.local-note small {
+  display: block;
+  color: #96a08f;
+  font-size: 10px;
+  margin-top: 3px;
+}
+.sidebar-settings {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-top: 1px solid #e0e5d9;
+  padding: 17px 3px;
+  width: 100%;
+  font-size: 11px;
+  color: #6b7763;
+}
+.sidebar-settings > svg:last-child {
+  margin-left: auto;
+}
+.sidebar-footer {
+  font-size: 9px;
+  color: #9aa38f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+}

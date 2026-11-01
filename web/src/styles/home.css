@@ -1,0 +1,41 @@
+.home {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 62px 66px 30px;
+}
+.home-intro {
+  padding-top: 6px;
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 1.9px;
+  font-weight: 650;
+  color: #7f9470;
+}
+.eyebrow > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #91a77b;
+}
+.home h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 4.8vw, 64px);
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -2.3px;
+  margin: 22px 0 20px;
+  color: #263f30;
+}
+.home h1 em {
+  font-weight: 400;
+  color: #6f855d;
+}
+.home-intro > p {
+  color: #8a9380;
+  font-size: 13px;
+  line-height: 1.9;
+}

@@ -1,0 +1,63 @@
+.main {
+  margin-left: 242px;
+  width: calc(100% - 242px);
+  min-width: 0;
+}
+.topbar {
+  height: 81px;
+  padding: 0 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e8ebe3;
+  background: #f9faf7;
+}
+.breadcrumb {
+  font-size: 11px;
+  color: #879181;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.breadcrumb strong {
+  font-weight: 500;
+  color: #52654b;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.service-status {
+  font-size: 10px;
+  color: #89947f;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.service-status i {
+  width: 5px;
+  height: 5px;
+  background: #89947f;
+  border-radius: 50%;
+}
+.service-status.online i {
+  background: #7e9e63;
+}
+.service-status.offline i {
+  background: #bd895b;
+}
+.connect-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  border: 1px solid #dce4d5;
+  background: #fdfefb;
+  border-radius: 6px;
+  padding: 8px 11px;
+  color: #53684a;
+}
+.connect-button.connected {
+  background: #edf2e6;
+}

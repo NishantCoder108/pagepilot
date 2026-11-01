@@ -1,0 +1,60 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 242px;
+  position: fixed;
+  inset: 0 auto 0 0;
+  background: #f0f2ed;
+  border-right: 1px solid #e2e6dd;
+  padding: 33px 23px 18px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 25px;
+  letter-spacing: -1px;
+  font-weight: 650;
+  padding: 0;
+  text-align: left;
+}
+.brand-mark {
+  width: 35px;
+  height: 36px;
+  background: #2b523f;
+  color: #f4f8ed;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 3px 5px #284f3c12;
+}
+.brand-dot {
+  color: #6d8e55;
+}
+.new-page {
+  margin: 36px 0 33px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #dce3d6;
+  border-radius: 8px;
+  padding: 11px 12px;
+  font-size: 13px;
+  font-weight: 550;
+  box-shadow: 0 2px 3px #20332104;
+}
+.new-page span {
+  margin-left: auto;
+  font-size: 16px;
+  color: #71816c;
+}
+.new-page:hover {
+  border-color: #a4b59c;
+}
