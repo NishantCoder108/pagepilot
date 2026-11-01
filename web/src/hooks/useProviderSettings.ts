@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchModels } from "../api";
+import { apiUrl } from "../config";
 import { PROVIDERS } from "../content";
 import { clearKeys, readKey, writeKey } from "../storage";
 import type { Model, Provider } from "../types";
@@ -30,7 +31,7 @@ export function useProviderSettings(notify: (message: string) => void) {
     }
     setKey(keys.current.openai || "");
     void Promise.all([
-      fetch("/health").then((response) => {
+      fetch(apiUrl("/health"), { credentials: "omit" }).then((response) => {
         if (!response.ok) throw new Error();
         return response.json();
       }),

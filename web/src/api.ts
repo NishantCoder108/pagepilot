@@ -1,4 +1,5 @@
 import type { Document, GenerationRequest, Model, StreamEvent } from "./types";
+import { apiUrl } from "./config";
 
 export class ApiError extends Error {
   constructor(
@@ -25,7 +26,8 @@ async function responseError(response: Response): Promise<ApiError> {
 export async function extract(
   input: { url: string } | { text: string; title?: string },
 ): Promise<Document> {
-  const response = await fetch("/api/extract", {
+  const response = await fetch(apiUrl("/api/extract"), {
+    credentials: "omit",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -35,7 +37,7 @@ export async function extract(
 }
 
 export async function fetchModels(): Promise<Model[]> {
-  const response = await fetch("/api/models");
+  const response = await fetch(apiUrl("/api/models"), { credentials: "omit" });
   if (!response.ok) throw await responseError(response);
   return (await response.json()).models;
 }
@@ -75,7 +77,8 @@ export async function generate(
   signal: AbortSignal,
   onEvent: (event: StreamEvent) => void,
 ): Promise<void> {
-  const response = await fetch("/api/generate", {
+  const response = await fetch(apiUrl("/api/generate"), {
+    credentials: "omit",
     method: "POST",
     headers: { "Content-Type": "application/json", "x-provider-key": key },
     body: JSON.stringify(request),

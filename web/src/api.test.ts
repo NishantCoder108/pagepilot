@@ -36,9 +36,21 @@ function mockStream(text: string) {
   );
 }
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
+});
 
 describe("streaming contract", () => {
+  it("sends generation directly to the configured HTTPS backend without cookies", async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "https://reader.hf.space");
+    mockStream('event: complete\ndata: {"citations":[]}\n\n');
+    await generate(request, "TEST_KEY", new AbortController().signal, () => {});
+    const [url, init] = vi.mocked(fetch).mock.calls[0];
+    expect(url).toBe("https://reader.hf.space/api/generate");
+    expect(init?.credentials).toBe("omit");
+    expect(JSON.stringify(init?.body)).not.toContain("TEST_KEY");
+  });
   it("handles CRLF, split frames, comments, and named events", () => {
     const decoder = new EventDecoder();
     expect(decoder.push(": keepalive\r\n\r\nevent: del")).toEqual([]);

@@ -30,9 +30,8 @@ export default function AppShell() {
         )}
         {backend === "offline" && (
           <div className="notice warning" role="alert">
-            The backend is unavailable. Start the Rust server with{" "}
-            <code>cargo run</code>, then refresh. Your saved pages remain
-            readable.
+            The reading service is unavailable or starting up. Refresh in a
+            moment. Your saved pages remain readable.
           </div>
         )}
 
