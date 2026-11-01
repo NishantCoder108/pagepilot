@@ -4,15 +4,12 @@ Read a page. Understand the essentials. Ask better questions.
 
 PagePilot turns public articles and documentation into a readable source, an AI summary, and a conversation grounded in the page. Bring your own OpenAI, Anthropic, or Gemini API key. Your reading history stays in your browser.
 
-## Preview
 
-**Live app:** Deployment pending · **Demo video:** Recording pending
+> **Live App:** [PagePilot Live](https://pagepilot-rust.vercel.app/)
 
-<!-- Replace the pending labels above with links once the deployment and recording are ready. See docs/media/README.md for examples. -->
 
-![PagePilot home screen](docs/media/home.jpg)
+https://github.com/user-attachments/assets/932cfbc2-e1ea-45b5-8cef-2574e3eb96ca
 
-[View the reading workspace](docs/media/workspace.jpg).
 
 ## What you can do
 
