@@ -1,6 +1,6 @@
-# Deploy PagePilot: Vercel + Hugging Face Spaces
+# Deploy PagePilot: Vercel + a Docker backend
 
-The browser loads the frontend from Vercel and calls the Hugging Face backend directly. Provider streams do not pass through Vercel Functions. Browser history and session keys remain on the frontend origin; the backend processes extraction/generation requests transiently.
+The browser loads the frontend from Vercel and calls the backend directly. Provider streams do not pass through Vercel Functions. Browser history and session keys remain on the frontend origin; the backend processes extraction/generation requests transiently.
 
 Create both services under accounts you control, then connect their origins using the steps below.
 
@@ -8,11 +8,26 @@ Create both services under accounts you control, then connect their origins usin
 
 Hugging Face currently requires a paid account plan to create Docker Spaces, even though CPU Basic compute has no hourly charge. Review the [current requirements](https://huggingface.co/docs/hub/spaces-overview#creating-a-new-space) before selecting a plan. No GPU is needed: PagePilot calls external model providers.
 
-Use one GitHub repository for this project. The Vercel project will build from its root; the Space receives a backend-only source bundle. Review the committed files before pushing. Never upload provider keys or local `.env` files.
+Use one GitHub repository for this project. Vercel and Render can build from its root; a Hugging Face Space receives a backend-only source bundle. Review the committed files before pushing. Never upload provider keys or local `.env` files.
 
 Run the project's tests and production build before the first deployment. Docker image execution must also be verified on a running Docker daemon or through the Space build/runtime logs; unit tests alone do not validate a Linux container.
 
-## 2. Prepare the backend Space
+## 2. Prepare the backend on Render
+
+Create a Web Service linked to your repository. Use the Docker runtime, repository root as the build context, and the root `Dockerfile`. Set the health check path to `/health`.
+
+Set these runtime environment variables in Render:
+
+```text
+BIND_ADDR=0.0.0.0:10000
+SERVE_FRONTEND=false
+```
+
+Add `ALLOWED_ORIGINS` when the Vercel frontend origin is known. Render supplies a direct HTTPS service domain. Open `/health` on that domain and confirm the service is healthy before connecting Vercel. Free instances sleep when idle and have usage limits; review [Render's current limits](https://render.com/docs/free).
+
+The root image builds the UI too, keeping combined hosting available. `SERVE_FRONTEND=false` makes the running service API-only.
+
+### Alternative: Hugging Face Docker Space
 
 Create a new Docker Space with public app access. A fully private Space requires authentication that the current browser client does not implement. Protected/public access options depend on your account; review the [visibility documentation](https://huggingface.co/docs/hub/spaces-overview#spaces-visibility).
 
@@ -37,31 +52,31 @@ Visit `/health` on the direct HTTPS `hf.space` domain shown by Hugging Face. It 
 
 ## 3. Configure Vercel
 
-Import the main GitHub repository into Vercel. Keep **Root Directory at the repository root**, not `web/`, so the shared line-budget script is available. The root `vercel.json` defines:
+Import the main GitHub repository into Vercel. Keep **Root Directory at the repository root**, not `web/`, so the shared line-budget script is available. The root `vercel.ts` defines:
 
 - Framework: Vite.
 - Install command: `npm ci --prefix web`.
 - Build command: `npm --prefix web run build`.
 - Output directory: `web/dist`.
 
-Set `VITE_API_BASE_URL` in the Vercel project's build-time environment to the backend's actual HTTPS origin. It should end with `.hf.space` and contain no `/api` path, query, fragment, or credentials. The build rejects a missing API origin on Vercel and invalid origin values.
+Set `VITE_API_BASE_URL` in the Vercel project's build-time environment to the backend's actual HTTPS origin, whether hosted on Render, Hugging Face, or a custom domain. Include no `/api` path, query, fragment, or credentials. The build rejects a missing API origin on Vercel and invalid origin values.
 
 Deploy, then note the production frontend origin. Changing `VITE_API_BASE_URL` requires a new frontend build/deployment; it is public configuration, not a secret. Never add provider keys as `VITE_` variables.
 
-The Vercel Content Security Policy currently allows connections to HTTPS `hf.space` subdomains. Narrow that `connect-src` entry to the exact backend origin once its name is known. If using a backend custom domain, update the policy to permit it before deploying the frontend.
+Vercel evaluates `vercel.ts` using the project's environment variables. Its Content Security Policy permits connections to the exact `VITE_API_BASE_URL` origin, which is also used by the frontend API client. No backend hostname belongs in source configuration. To change hosts, update this variable in the intended Vercel environment and redeploy. Keep only `vercel.ts`; do not restore the old static `vercel.json` alongside it.
 
-## 4. Connect the frontend origin on Hugging Face
+## 4. Connect the frontend origin on the backend
 
-In Space Settings → Variables, set `ALLOWED_ORIGINS` to the exact production frontend origin from Vercel. Use HTTPS without a path. Multiple trusted origins may be comma-separated; wildcard domains, `*`, embedded credentials, and public HTTP origins are rejected.
+In Render → Environment (or Hugging Face Space Settings → Variables), set `ALLOWED_ORIGINS` to the exact production frontend origin from Vercel. Use HTTPS without a path. Multiple trusted origins may be comma-separated; wildcard domains, `*`, embedded credentials, and public HTTP origins are rejected.
 
-The image already sets these values:
+The Hugging Face image already sets these values; Render uses the configuration in step 2:
 
 ```text
 BIND_ADDR=0.0.0.0:7860
 SERVE_FRONTEND=false
 ```
 
-Keep provider API keys out of Space settings. The user supplies their own through the UI. Restart the Space after changing configuration so the application reads the new values.
+Keep provider API keys out of hosting settings. The user supplies their own through the UI. Restart/redeploy the backend after changing configuration so the application reads the new values.
 
 The backend permits JSON and `x-provider-key` preflight headers for allowed origins and exposes safe request IDs. It does not use cross-origin cookies. CORS restricts browser access; it is not authentication for a public API, and non-browser clients can still call the service.
 
@@ -70,7 +85,7 @@ Add preview-deployment origins explicitly if needed. Do not allow every `vercel.
 ## 5. Verify the deployed pair
 
 1. Open the production frontend in a fresh tab. Confirm the reading service is available and models load.
-2. Read the sample article without a key, then extract a public URL. Browser Network should show requests going to the Space origin.
+2. Read the sample article without a key, then extract a public URL. Browser Network should show requests going to the backend origin.
 3. Confirm browser preflight responses allow only your configured frontend origin, including `content-type` and `x-provider-key` for generation.
 4. Enter your own provider key, generate a short summary, ask a question, and follow a citation. Real generation uses that provider's API billing.
 5. Stop a response, refresh during another response, and verify incomplete output/history recovery. Confirm the proxy streams progressively rather than buffering until completion.
@@ -92,5 +107,6 @@ Do not call the deployment complete until actual streaming, provider access, and
 
 - [Hugging Face Docker Spaces](https://huggingface.co/docs/hub/spaces-sdks-docker)
 - [Space metadata and exposed port](https://huggingface.co/docs/hub/spaces-config-reference)
-- [Vercel project configuration](https://vercel.com/docs/project-configuration)
+- [Vercel programmatic configuration](https://vercel.com/docs/project-configuration/vercel-ts)
+- [Render Docker web services](https://render.com/docs/web-services)
 - [Vite on Vercel](https://vercel.com/docs/frameworks/frontend/vite)

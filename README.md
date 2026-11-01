@@ -56,7 +56,7 @@ The React frontend sends a URL to the Axum API. The backend validates the destin
 - **Backend:** Rust, Axum, Tokio, and reqwest.
 - **Extraction:** readability processing with `dom_smoothie`.
 - **Persistence:** IndexedDB for reading history; sessionStorage for provider keys.
-- **Deployment:** Vercel frontend with a Hugging Face Docker Space backend, or a combined Docker service for local/self-hosted use.
+- **Deployment:** Vercel frontend with a Docker backend on Render or Hugging Face Spaces, or a combined Docker service for local/self-hosted use.
 
 There is no server database or account system. [Explore the code structure](docs/06-code-structure.md) or read the [API and browser data contracts](docs/02-data-api.md).
 
@@ -84,7 +84,7 @@ Citations link to existing passages; they do not guarantee that an answer is cor
 
 ## Run with Docker
 
-For the Vercel + Hugging Face setup, follow the [split deployment guide](docs/08-split-deployment.md). It covers the backend-only image, frontend build settings, origin restrictions, and live verification.
+For a Vercel frontend with a separate Docker backend, follow the [split deployment guide](docs/08-split-deployment.md). The API address and security policy use the platform's `VITE_API_BASE_URL` setting; changing hosts requires a redeploy, without editing hostnames in code.
 
 ```sh
 docker compose up --build
@@ -119,5 +119,5 @@ Paid generation and production capacity need validation with the chosen provider
 - [Fourteen implementation milestones](docs/03-milestones.md)
 - [Code structure](docs/06-code-structure.md)
 - [Commit workflow](docs/07-commit-workflow.md)
-- [Vercel + Hugging Face deployment](docs/08-split-deployment.md)
+- [Vercel + Docker backend deployment](docs/08-split-deployment.md)
 - [Adding screenshots, a demo video, and the live URL](docs/media/README.md)

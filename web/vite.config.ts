@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const origin = parseApiBaseUrl(env.VITE_API_BASE_URL ?? "");
   if (process.env.VERCEL && !origin) {
     throw new Error(
-      "Set VITE_API_BASE_URL to your Hugging Face Space origin before deploying to Vercel.",
+      "Set VITE_API_BASE_URL to your backend HTTPS origin before deploying to Vercel.",
     );
   }
   return {

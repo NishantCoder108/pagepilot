@@ -10,6 +10,7 @@ export function parseApiBaseUrl(raw: string): string {
   if (
     raw.includes("*") ||
     url.hostname.includes("*") ||
+    /[;'"\s]/.test(url.origin) ||
     !(url.protocol === "https:" || (url.protocol === "http:" && local)) ||
     url.username ||
     url.password ||

@@ -2,6 +2,7 @@ FROM node:24-bookworm-slim AS web
 WORKDIR /build/web
 COPY scripts/check-file-size.mjs /build/scripts/check-file-size.mjs
 COPY server/src/ /build/server/src/
+COPY vercel.ts /build/vercel.ts
 COPY web/package*.json ./
 RUN npm ci
 COPY web/ ./

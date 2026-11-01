@@ -1,6 +1,6 @@
 # 04 · Deployment and operations
 
-For separate Vercel frontend and Hugging Face backend hosting, use the [split deployment guide](08-split-deployment.md). This document also covers the original combined container setup.
+For a Vercel frontend with a Docker backend on Render or Hugging Face, use the [split deployment guide](08-split-deployment.md). This document also covers the original combined container setup.
 
 ## Local and container configuration
 

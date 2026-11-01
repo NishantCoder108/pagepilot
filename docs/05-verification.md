@@ -1,5 +1,12 @@
 # 05 · Verification record
 
+## November 1, 2026: platform-configured backend origin
+
+- Replaced static `vercel.json` with `vercel.ts`. The API client and exact-origin connection policy now read the same `VITE_API_BASE_URL` platform variable.
+- Frontend tests: 24 passed, including generated policy changes, missing deployment configuration, and CSP injection rejection. Local and Render-origin production builds pass; source/config files remain within 200 lines.
+- The combined Docker build now copies the shared deployment configuration for TypeScript checking. Docker image execution remains pending on a running daemon.
+- User reports a working Render deployment. The new Vercel configuration has been evaluated locally; its deployed headers and cross-origin behavior still need a live check.
+
 ## November 1, 2026: split-hosting preparation
 
 - Added exact-origin browser access, credential-header preflight handling, and API-only backend mode; Rust tests now total 20 passed.
@@ -53,7 +60,7 @@ Verified locally on October 30, 2026, using Rust 1.97.1 and Node 26.10.0. This i
 
 - Successful paid summary/chat requests with real OpenAI, Anthropic, and Gemini keys, including model access, billing/quota, and provider-specific behavior. Adapter contracts and mock streams are tested; they do not substitute for these account-dependent checks.
 - Docker image build/run: Docker CLI is installed, but its daemon is stopped. Compose syntax validation does not verify image compilation or Linux runtime behavior.
-- Public deployment: Vercel + Hugging Face configuration is prepared, but no live projects/domains are connected. Proxy buffering, trusted edge rate limits, production egress restrictions, and deployment resource sizing must be checked on the chosen host.
+- Public deployment: the user reports Render is running. The updated Vercel configuration, proxy buffering, trusted edge rate limits, production egress restrictions, and deployment resource sizing still need independent checks on the chosen hosts.
 - Storage quota exhaustion through a real browser policy and full browser UI export/delete flows. Storage failure handling, export content, and cascade deletion have automated coverage.
 
 ## Reproduce streaming UI checks without paying
