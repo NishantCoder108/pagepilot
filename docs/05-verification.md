@@ -1,5 +1,13 @@
 # 05 · Verification record
 
+## November 1, 2026: split-hosting preparation
+
+- Added exact-origin browser access, credential-header preflight handling, and API-only backend mode; Rust tests now total 20 passed.
+- Added configurable frontend API origin validation and a direct generation-request check with cookies omitted; frontend tests now total 20 passed.
+- Production builds pass for local hosting and a Vercel-style build with an HTTPS Space origin. Rust formatting/Clippy and the 200-line source/config limit pass.
+- Prepared the backend-only Hugging Face source bundle. Docker CLI cannot reach a running daemon, so the Space image build/runtime remain unverified.
+- Vercel/Hugging Face configuration and a deployment guide are committed preparation, not evidence of live hosting. No valid provider key or paid request was used.
+
 ## November 1, 2026: module refactor
 
 - Split React rendering into layout/home/workspace/settings components, behavior into hooks, and generation state changes into pure helpers.
@@ -45,7 +53,7 @@ Verified locally on October 30, 2026, using Rust 1.97.1 and Node 26.10.0. This i
 
 - Successful paid summary/chat requests with real OpenAI, Anthropic, and Gemini keys, including model access, billing/quota, and provider-specific behavior. Adapter contracts and mock streams are tested; they do not substitute for these account-dependent checks.
 - Docker image build/run: Docker CLI is installed, but its daemon is stopped. Compose syntax validation does not verify image compilation or Linux runtime behavior.
-- Public deployment: no hosting target, domain, or TLS reverse proxy is configured. Proxy buffering, trusted edge rate limits, production egress restrictions, and deployment resource sizing must be checked on the chosen host.
+- Public deployment: Vercel + Hugging Face configuration is prepared, but no live projects/domains are connected. Proxy buffering, trusted edge rate limits, production egress restrictions, and deployment resource sizing must be checked on the chosen host.
 - Storage quota exhaustion through a real browser policy and full browser UI export/delete flows. Storage failure handling, export content, and cascade deletion have automated coverage.
 
 ## Reproduce streaming UI checks without paying

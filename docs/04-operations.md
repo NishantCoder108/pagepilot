@@ -1,5 +1,7 @@
 # 04 · Deployment and operations
 
+For separate Vercel frontend and Hugging Face backend hosting, use the [split deployment guide](08-split-deployment.md). This document also covers the original combined container setup.
+
 ## Local and container configuration
 
 Rust reads exported environment variables directly. `.env.example` documents defaults; it is not automatically loaded. Never configure provider credentials as server environment variables. Compose has a loopback-only port, non-root process, read-only root filesystem, dropped capabilities, one CPU, and a 512 MB limit. These are initial guardrails, not benchmarked production sizing.
@@ -9,6 +11,8 @@ Build with `docker compose build`; start with `docker compose up -d`; stop with 
 ## TLS and proxy
 
 The runtime has no built-in TLS. Put it behind an HTTPS reverse proxy and keep port 3000 private. Terminate TLS at the proxy, redirect public HTTP to HTTPS, disable response buffering for `/api/generate`, use a proxy read timeout greater than GENERATION_TIMEOUT_SECONDS, and disable access-log URL query/header/body capture. Do not enable request/response body telemetry. The application never logs keys, source content, questions, provider response bodies, or full URLs.
+
+Set `ALLOWED_ORIGINS` to exact trusted HTTPS frontend origins for split hosting. Empty preserves same-origin browser use. API-only images use `SERVE_FRONTEND=false`; the standard container defaults to serving the built UI. CORS does not authenticate non-browser API callers.
 
 The built-in per-minute limiter keys on the immediate socket peer, deliberately ignoring forwarded IP headers that clients can spoof. Behind a reverse proxy, all visitors may share this quota. Apply trusted client-IP abuse limits at the edge, then tune the conservative backend peer limit. Do not blindly trust arbitrary X-Forwarded-For. Multiple replicas require shared edge/distributed abuse controls; process semaphores are per replica.
 

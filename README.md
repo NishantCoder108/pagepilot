@@ -56,13 +56,13 @@ The React frontend sends a URL to the Axum API. The backend validates the destin
 - **Backend:** Rust, Axum, Tokio, and reqwest.
 - **Extraction:** readability processing with `dom_smoothie`.
 - **Persistence:** IndexedDB for reading history; sessionStorage for provider keys.
-- **Deployment:** one Docker service serving the built frontend and API under the same origin.
+- **Deployment:** Vercel frontend with a Hugging Face Docker Space backend, or a combined Docker service for local/self-hosted use.
 
 There is no server database or account system. [Explore the code structure](docs/06-code-structure.md) or read the [API and browser data contracts](docs/02-data-api.md).
 
 ## Configuration and concurrency
 
-Defaults are documented in [.env.example](.env.example). Rust reads exported environment variables; it does not automatically load that file.
+Backend defaults are documented in [.env.example](.env.example). Rust reads exported environment variables; it does not automatically load that file. For separate hosting, [web/.env.example](web/.env.example) documents the frontend API origin, and `ALLOWED_ORIGINS` controls trusted frontend origins on the backend.
 
 ```sh
 FETCH_CONCURRENCY=8 GENERATION_CONCURRENCY=8 cargo run --locked
@@ -83,6 +83,8 @@ The 30-POSTs-per-minute rate limit is separate and uses the immediate connection
 Citations link to existing passages; they do not guarantee that an answer is correct. Check important claims against the source. Production hosting must use HTTPS and avoid logging request bodies or sensitive headers.
 
 ## Run with Docker
+
+For the Vercel + Hugging Face setup, follow the [split deployment guide](docs/08-split-deployment.md). It covers the backend-only image, frontend build settings, origin restrictions, and live verification.
 
 ```sh
 docker compose up --build
@@ -117,4 +119,5 @@ Paid generation and production capacity need validation with the chosen provider
 - [Fourteen implementation milestones](docs/03-milestones.md)
 - [Code structure](docs/06-code-structure.md)
 - [Commit workflow](docs/07-commit-workflow.md)
+- [Vercel + Hugging Face deployment](docs/08-split-deployment.md)
 - [Adding screenshots, a demo video, and the live URL](docs/media/README.md)
