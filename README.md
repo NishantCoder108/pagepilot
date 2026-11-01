@@ -84,7 +84,7 @@ Citations link to existing passages; they do not guarantee that an answer is cor
 
 ## Run with Docker
 
-For a Vercel frontend with a separate Docker backend, follow the [split deployment guide](docs/08-split-deployment.md). The API address and security policy use the platform's `VITE_API_BASE_URL` setting; changing hosts requires a redeploy, without editing hostnames in code.
+For a Vercel frontend with a separate Docker backend, follow the [split deployment guide](docs/08-split-deployment.md). Set the API address using `VITE_API_BASE_URL`. The static `vercel.json` security policy allows the current Render backend; update that allowlist too when changing hosts, then redeploy.
 
 ```sh
 docker compose up --build

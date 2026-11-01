@@ -1,43 +1,41 @@
+import { existsSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { apiUrl } from "./config";
 
-afterEach(() => {
-  vi.unstubAllEnvs();
-  vi.resetModules();
-});
+type Header = { key: string; value: string };
+const config = JSON.parse(
+  readFileSync(new URL("../../vercel.json", import.meta.url), "utf8"),
+) as { headers: { headers: Header[] }[] };
+const headers = config.headers[0].headers;
+const policy = headers.find(
+  (header) => header.key === "Content-Security-Policy",
+)!.value;
 
-describe("platform-configured backend security policy", () => {
-  it.each(["https://reader.onrender.com", "https://another.example"])(
-    "allows only the configured backend origin: %s",
-    async (origin) => {
-      vi.stubEnv("VERCEL", "1");
-      vi.stubEnv("VITE_API_BASE_URL", `${origin}/`);
-      const { config } = await import("../../vercel.ts");
-      const headers = config.headers[0].headers;
-      const deployed = JSON.parse(JSON.stringify(config));
-      for (const header of deployed.headers[0].headers) {
-        expect(typeof header.value).toBe("string");
-        expect(header.value.trim().length).toBeGreaterThan(0);
-      }
-      const policy = headers.find(
-        (header) => header.key === "Content-Security-Policy",
-      )!.value;
-      expect(policy.split("; ")).toContain(`connect-src 'self' ${origin}`);
-      expect(policy).toContain("frame-ancestors 'none'");
-      expect(policy).not.toContain("*");
-      expect(headers).toContainEqual({ key: "X-Frame-Options", value: "DENY" });
-    },
-  );
+afterEach(() => vi.unstubAllEnvs());
 
-  it("rejects a missing deployment origin", async () => {
-    vi.stubEnv("VERCEL", "1");
-    vi.stubEnv("VITE_API_BASE_URL", "");
-    await expect(import("../../vercel.ts")).rejects.toThrow(
-      "Set VITE_API_BASE_URL",
-    );
+describe("static Vercel security configuration", () => {
+  it("supplies a nonempty string value for every header", () => {
+    for (const header of headers) {
+      expect(typeof header.key).toBe("string");
+      expect(typeof header.value).toBe("string");
+      expect(header.value.trim().length).toBeGreaterThan(0);
+    }
   });
 
-  it("rejects an origin that could inject CSP directives", async () => {
-    vi.stubEnv("VITE_API_BASE_URL", "https://reader.example;script-src");
-    await expect(import("../../vercel.ts")).rejects.toThrow("HTTPS origin");
+  it("allows the Render backend used by the frontend", () => {
+    vi.stubEnv("VITE_API_BASE_URL", "https://pagepilot-p7zj.onrender.com");
+    const origin = new URL(apiUrl("/health")).origin;
+    expect(policy.split("; ")).toContain(`connect-src 'self' ${origin}`);
+    expect(policy).not.toContain("*");
+  });
+
+  it("retains script and framing protections", () => {
+    expect(policy).toContain("script-src 'self'");
+    expect(policy).toContain("frame-ancestors 'none'");
+    expect(headers).toContainEqual({ key: "X-Frame-Options", value: "DENY" });
+  });
+
+  it("has no conflicting TypeScript configuration", () => {
+    expect(existsSync(new URL("../../vercel.ts", import.meta.url))).toBe(false);
   });
 });

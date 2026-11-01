@@ -52,7 +52,7 @@ Visit `/health` on the direct HTTPS `hf.space` domain shown by Hugging Face. It 
 
 ## 3. Configure Vercel
 
-Import the main GitHub repository into Vercel. Keep **Root Directory at the repository root**, not `web/`, so the shared line-budget script is available. The root `vercel.ts` defines:
+Import the main GitHub repository into Vercel. Keep **Root Directory at the repository root**, not `web/`, so the shared line-budget script is available. The root `vercel.json` defines:
 
 - Framework: Vite.
 - Install command: `npm ci --prefix web`.
@@ -63,7 +63,7 @@ Set `VITE_API_BASE_URL` in the Vercel project's build-time environment to the ba
 
 Deploy, then note the production frontend origin. Changing `VITE_API_BASE_URL` requires a new frontend build/deployment; it is public configuration, not a secret. Never add provider keys as `VITE_` variables.
 
-Vercel evaluates `vercel.ts` using the project's environment variables. Its Content Security Policy permits connections to the exact `VITE_API_BASE_URL` origin, which is also used by the frontend API client. No backend hostname belongs in source configuration. To change hosts, update this variable in the intended Vercel environment and redeploy. Keep only `vercel.ts`; do not restore the old static `vercel.json` alongside it.
+The static `vercel.json` Content Security Policy explicitly permits `https://pagepilot-p7zj.onrender.com`. Set `VITE_API_BASE_URL` to that same origin in Vercel. This public hostname is safe to include in configuration; provider keys remain user-supplied. To change hosts, update both the environment variable and the policy's `connect-src` entry, then redeploy. Keep only `vercel.json`; the dynamic `vercel.ts` configuration was removed after hosted schema validation failed.
 
 ## 4. Connect the frontend origin on the backend
 
@@ -107,6 +107,6 @@ Do not call the deployment complete until actual streaming, provider access, and
 
 - [Hugging Face Docker Spaces](https://huggingface.co/docs/hub/spaces-sdks-docker)
 - [Space metadata and exposed port](https://huggingface.co/docs/hub/spaces-config-reference)
-- [Vercel programmatic configuration](https://vercel.com/docs/project-configuration/vercel-ts)
+- [Vercel static configuration and headers](https://vercel.com/docs/project-configuration/vercel-json#headers)
 - [Render Docker web services](https://render.com/docs/web-services)
 - [Vite on Vercel](https://vercel.com/docs/frameworks/frontend/vite)

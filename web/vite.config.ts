@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
       "Set VITE_API_BASE_URL to your backend HTTPS origin before deploying to Vercel.",
     );
   }
+  if (process.env.VERCEL && new URL(origin).protocol !== "https:") {
+    throw new Error("VITE_API_BASE_URL must use HTTPS on Vercel.");
+  }
   return {
     plugins: [react()],
     server: {

@@ -1,5 +1,12 @@
 # 05 · Verification record
 
+## November 1, 2026: static Vercel fallback
+
+- The user supplied a hosted validation failure for commit `a59ef85`: the fifth response header (CSP) was missing `value`. Replaced `vercel.ts` with static `vercel.json`, explicitly allowing the user's public Render backend. This avoids dynamic header evaluation; the exact hosted evaluator failure was not reproduced locally.
+- Vercel CLI 65.9.0 selects the static JSON without compilation, and its full configuration schema validator accepts it. The API client still uses `VITE_API_BASE_URL`; changing backend hosts now requires updating the static CSP allowlist too.
+- All 24 frontend tests, the production build, and the 200-line source/config check pass. Preserved hosted HTTPS enforcement in Vite and updated the Docker build's configuration copy.
+- A live read-only request to the Render `/health` endpoint returned `{"service":"pagepilot","status":"ok"}`. The new Vercel deployment remains to be verified after pushing the replacement configuration.
+
 ## November 1, 2026: hosted CSP schema compatibility
 
 - Hosted Vercel validation reported a missing CSP header value. Replaced the array/`join()` expression with a direct template string while preserving the platform-configured backend origin.
