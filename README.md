@@ -1,69 +1,120 @@
 # PagePilot
 
-A calm place to turn a public web page into understanding: extract readable text, generate a cited summary, and ask source-grounded questions with your own OpenAI, Anthropic, or Gemini API key.
+Read a page. Understand the essentials. Ask better questions.
 
-Rust + Axum + Tokio backend. React + TypeScript + Vite frontend. No accounts or server database. Documents and chats live in IndexedDB; keys live in the current tab's sessionStorage and pass through the backend for individual provider requests. No simulated AI or bundled provider keys.
+PagePilot turns public articles and documentation into a readable source, an AI summary, and a conversation grounded in the page. Bring your own OpenAI, Anthropic, or Gemini API key. Your reading history stays in your browser.
 
-## Run locally
+## Preview
 
-Prerequisites: current stable Rust (tested with 1.97.1), Node 24+ and npm. Start from the repository root:
+**Live app:** Deployment pending · **Demo video:** Recording pending
+
+<!-- Replace the pending labels above with links once the deployment and recording are ready. See docs/media/README.md for examples. -->
+
+![PagePilot home screen](docs/media/home.jpg)
+
+[View the reading workspace](docs/media/workspace.jpg).
+
+## What you can do
+
+- Extract the readable content of a public web page, or paste text directly.
+- Read the source before connecting an AI provider.
+- Generate a summary and ask follow-up questions with streamed responses.
+- Open passage citations to check the source behind an answer.
+- Select specific passages when you want a narrower context.
+- Revisit saved pages and conversations without creating an account.
+- Export a page, summary, and conversation as Markdown.
+- Stop generation, retry an interrupted response, or clear your keys and history.
+
+## Quick start
+
+Install a current stable Rust toolchain and Node.js 24 or newer. From the repository root:
 
 ```sh
 cd web
 npm ci
 npm run build
 cd ..
-cargo run
+cargo run --locked
 ```
 
-Open [PagePilot](http://127.0.0.1:3000). Try the sample article without a key. Connect AI when ready to generate; API billing is separate from a consumer chat subscription.
+Open [localhost:3000](http://127.0.0.1:3000). Try the sample article without a key, then use **Connect AI** to choose a provider and model. Generation requires an API key with access and billing for that provider; a consumer chat subscription may not include API usage.
 
-For frontend development, keep `cargo run` in one terminal, then run `cd web && npm run dev` in another. Vite prints its local URL and proxies API requests to Rust. Restart Rust after backend changes; Vite updates the UI automatically. Rebuild the web bundle to update the version served directly by Rust.
-
-## Learn the implementation
-
-Read these in order:
-
-1. [Product and user journey](docs/01-product.md)
-2. [Browser schema and API contracts](docs/02-data-api.md)
-3. [Fourteen small milestones and manual checks](docs/03-milestones.md)
-4. [Deployment, limits, and operations](docs/04-operations.md)
-5. [Code structure and file-size convention](docs/06-code-structure.md)
-6. [Small milestone commits and Git workflow](docs/07-commit-workflow.md)
-
-Backend: `server/src/main.rs` only starts the process. `http/` owns routes, handlers, rate limits, and middleware; `extract/` normalizes sources; `fetch/` owns safe downloading; `providers/` separates context preparation, provider requests, parsing, and streaming. `types.rs` defines contracts/model catalog; `config.rs` owns shared resources and runtime limits.
-
-Frontend: `web/src/App.tsx` composes the provider and application shell. `components/` contains layout, home, workspace, and settings UI; `hooks/` owns state and behavior; `generation/` owns generation state transitions; `styles/` separates CSS by UI responsibility. `storage.ts` owns browser persistence; `api.ts` owns HTTP and stream decoding.
-
-Handwritten source/config files have a maximum of **200 lines**, including comments and blanks. `node scripts/check-file-size.mjs` checks the frontend, backend, tests, styles, and scripts; `npm run build` runs it automatically. Generated lockfiles and build/dependency directories are excluded. Keep modules focused rather than compressing code to fit the limit.
-
-## Checks
+For frontend development, keep the Rust server running and start Vite in a second terminal:
 
 ```sh
-cargo test --locked
-cargo clippy --all-targets -- -D warnings
-cargo fmt --all --check
 cd web
-npm test
-npm run build
+npm run dev
 ```
 
-With the server running, `python3 scripts/smoke.py` performs keyless HTTP checks. Add `--external-url https://tokio.rs/tokio/tutorial` to exercise a public page, or `--requests 20 --concurrency 4` for a bounded local load probe. Public websites may block automated access; pasted text remains available.
+Open the URL printed by Vite. It forwards API requests to the Rust server. Vite updates the frontend during development; restart Rust after backend changes.
 
-Real model generation requires your own key. Automated tests mock provider streams and never make paid requests. There is no automatic generation retry. Stop/disconnect drops the upstream request; a provider may still bill work already performed.
+## How it works
 
-For manual streaming checks without a paid key, run `python3 scripts/ui_fixture.py` alongside Rust and open [the isolated test fixture](http://127.0.0.1:3001). Use only the literal `pagepilot-fixture-key`. Output is clearly labeled test content. Questions containing `slow`, `interrupt`, or `error` exercise cancellation, unexpected EOF, and error states. This separate local test server never calls a model provider and is not part of the production container.
+The React frontend sends a URL to the Axum API. The backend validates the destination, downloads bounded HTML, and extracts readable passages in a separate parsing worker. Summaries and questions are separate requests: the backend sends the selected source and conversation context to the chosen provider and streams its response to the browser.
 
-## Container
+- **Frontend:** React, TypeScript, and Vite.
+- **Backend:** Rust, Axum, Tokio, and reqwest.
+- **Extraction:** readability processing with `dom_smoothie`.
+- **Persistence:** IndexedDB for reading history; sessionStorage for provider keys.
+- **Deployment:** one Docker service serving the built frontend and API under the same origin.
+
+There is no server database or account system. [Explore the code structure](docs/06-code-structure.md) or read the [API and browser data contracts](docs/02-data-api.md).
+
+## Configuration and concurrency
+
+Defaults are documented in [.env.example](.env.example). Rust reads exported environment variables; it does not automatically load that file.
+
+```sh
+FETCH_CONCURRENCY=8 GENERATION_CONCURRENCY=8 cargo run --locked
+```
+
+Each server instance has separate limits: 64 requests reading input/preparing responses, 16 URL extraction jobs, 2 HTML parsing workers, and 16 generation streams. A full stage returns a busy response instead of growing an unlimited queue. These are workload limits, not a promise of how many users a host can support.
+
+The 30-POSTs-per-minute rate limit is separate and uses the immediate connection's IP address. Visitors behind a reverse proxy can share that quota; configure trusted client limits at the edge before public deployment. See [operations](docs/04-operations.md) for timeouts, body limits, proxy settings, and scaling considerations.
+
+## Privacy and source accuracy
+
+- Keys stay in the tab's sessionStorage across refreshes. Use **Clear all keys** when finished; browser session recovery may restore tab storage.
+- The backend receives credentials transiently for provider requests. Application code does not persist or log keys, source text, or conversations.
+- The selected provider receives the submitted source and conversation context under its own data policies.
+- Browser history is local to that browser and origin. It is not encrypted or synchronized by PagePilot; clearing site data removes it. Export anything you want to keep.
+- Page content is treated as untrusted input. Internal destinations are blocked, and source/model output is rendered without executing page scripts or model-supplied HTML.
+
+Citations link to existing passages; they do not guarantee that an answer is correct. Check important claims against the source. Production hosting must use HTTPS and avoid logging request bodies or sensitive headers.
+
+## Run with Docker
 
 ```sh
 docker compose up --build
 ```
 
-Open [the local container](http://127.0.0.1:3000). Compose binds only to loopback; put a TLS reverse proxy in front for public hosting. See the operations guide before exposing the service. The included configuration is a starting point, not a verified capacity guarantee.
+Open [localhost:3000](http://127.0.0.1:3000). Compose binds the port to loopback and runs the application as a non-root user with a read-only filesystem. Public hosting needs HTTPS, streaming-compatible proxy settings, and resource limits appropriate to the host. Read the [deployment notes](docs/04-operations.md) before exposing it.
 
-## Boundaries
+## Development checks
 
-One public UTF-8 HTML page or pasted document per conversation. No JavaScript rendering, PDFs, paywall bypass, accounts, sync, embeddings, or crawling. Unsupported extraction offers paste fallback. Full source context is used within a conservative byte budget; select fewer passages or paste shorter text when over budget. Nothing is silently truncated.
+```sh
+cargo test --locked
+cargo fmt --all --check
+cargo clippy --all-targets -- -D warnings
+cd web
+npm test
+npm run build
+```
 
-Browser data can be cleared by the user/browser. Export Markdown for a portable copy. sessionStorage is readable by JavaScript and may be restored by browser session recovery; use Clear all keys when finished. The backend never persists keys/content, but the chosen provider processes submitted content under its own policies.
+The frontend build also checks that handwritten source/config files stay within 200 lines. Generated dependency lockfiles and build output are excluded.
+
+With the server running, `python3 scripts/smoke.py` checks extraction and HTTP behavior without a provider key. For deterministic streaming UI checks, use the [local test fixture](docs/05-verification.md#reproduce-streaming-ui-checks-without-paying). Automated provider tests use mocked streams and make no paid requests.
+
+## Current scope
+
+One public UTF-8 HTML page or pasted document per conversation. JavaScript-rendered pages, PDFs, authenticated pages, paywall bypass, multi-page research, accounts, and cross-device sync are outside the current scope. Failed extraction offers a pasted-text fallback. Oversized model context requires a smaller passage selection rather than silent truncation.
+
+Paid generation and production capacity need validation with the chosen provider accounts and deployment host. The [verification record](docs/05-verification.md) distinguishes completed checks from remaining external checks.
+
+## Further reading
+
+- [Product and user journey](docs/01-product.md)
+- [Fourteen implementation milestones](docs/03-milestones.md)
+- [Code structure](docs/06-code-structure.md)
+- [Commit workflow](docs/07-commit-workflow.md)
+- [Adding screenshots, a demo video, and the live URL](docs/media/README.md)
